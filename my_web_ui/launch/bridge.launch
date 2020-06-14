@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+    <!-- # rosbridge_server -->
+    <node pkg="rosbridge_server" type="rosbridge_websocket" name="rosbridge_server">
+        <param name="unregister_timeout" value="86400"/>
+    </node>
+
+    <!-- # web_video_server -->
+    <node pkg="web_video_server" type="web_video_server" name="web_video_server"/>
+
+</launch>

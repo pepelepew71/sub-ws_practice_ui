@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+
+    <arg name="name" />
+
+    <node pkg="tk_chatroom" name="server" type="server.py" />
+    <node pkg="tk_chatroom" name="$(arg name)" type="client.py" />
+
+    <!-- # pdb debug -->
+    <!-- <node pkg="tk_chatroom" name="client_$(arg name)" type="client.py" launch-prefix="xterm -e python -m pdb">
+        <param name="name" value="$(arg name)" type="str"/>
+    </node> -->
+
+</launch>

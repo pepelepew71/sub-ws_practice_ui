@@ -1,23 +1,6 @@
 {
-  "short_name": "LeoRover",
-  "name": "LeoRover UI",
-  "icons": [
-    {
-      "src": "img/icon/logo.jpeg",
-      "type": "image/jpeg",
-      "sizes": "48x48"
-    },
-    {
-      "src": "img/icon/logo.jpeg",
-      "type": "image/jpeg",
-      "sizes": "96x96"
-    },
-    {
-      "src": "img/icon/logo.jpeg",
-      "type": "image/jpeg",
-      "sizes": "192x192"
-    }
-  ],
+  "short_name": "my_robot",
+  "name": "my_robot UI",
   "start_url": "index.html?launcher=true",
   "background_color": "#000000",
   "display": "fullscreen",

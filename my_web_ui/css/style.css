@@ -32,16 +32,16 @@
 }
 
 .slider-selection {
-	background: #BABABA;
+  background: #BABABA;
 }
 
 .slider.slider-horizontal {
-	width: 100%
+  width: 100%
 }
 
 .row {
-	margin-left: 0px;
-	margin-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .slider.slider-horizontal .tooltip.tooltip-main.in,
@@ -71,4 +71,8 @@ body {
 .rotate {
   transform: rotate(180deg);
   z-index:-1;
+}
+
+table {
+  color: white;
 }

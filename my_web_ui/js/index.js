@@ -2,14 +2,14 @@ var twist;
 var manager;
 var ros;
 var batterySub;
+var gpsSub;
 var cmdVelPub;
-var servo1Pub, servo2Pub, servo3Pub;
-var servo1Val, servo2Val, servo3Val;
-var servo1Last = 0, servo2Last = 0, servo3Last = 0;
+var servo1Pub, servo2Pub;
+var servo1Val, servo2Val;
+var servo1Last = 0, servo2Last = 0;
 var twistIntervalID;
 var servoIntervalID;
 var robot_hostname;
-var batterySub;
 
 var max_linear_speed = 0.5;
 var max_angular_speed = 1.2;
@@ -59,17 +59,8 @@ function initROS() {
         queue_size: 5
     });
 
-    servo3Pub = new ROSLIB.Topic({
-        ros: ros,
-        name: 'servo3/angle',
-        messageType: 'std_msgs/Int16',
-        latch: true,
-        queue_size: 5
-    });
-
     servo1Pub.advertise();
     servo2Pub.advertise();
-    servo3Pub.advertise();
 
     systemRebootPub = new ROSLIB.Topic({
         ros: ros,
@@ -93,6 +84,13 @@ function initROS() {
     });
     batterySub.subscribe(batteryCallback);
 
+    gpsSub = new ROSLIB.Topic({
+        ros : ros,
+        name : 'gps_fix',
+        messageType : 'sensor_msgs/NavSatFix',
+        queue_length: 1
+    });
+    gpsSub.subscribe(gpsCallback);
 }
 
 
@@ -100,10 +98,10 @@ function initSliders() {
 
     $('#s1-slider').slider({
         tooltip: 'show',
-        min: -140,
-        max: 160,
+        min: -90,
+        max: 0,
         step: 1,
-        value: 160
+        value: 0
     });
     $('#s1-slider').on("slide", function(slideEvt) {
         servo1Val = slideEvt.value;
@@ -112,7 +110,7 @@ function initSliders() {
     $('#s2-slider').slider({
         tooltip: 'show',
         min: -90,
-        max: 90,
+        max: 0,
         step: 1,
         value: 0
     });
@@ -120,16 +118,6 @@ function initSliders() {
         servo2Val = slideEvt.value;
     });
 
-    $('#s3-slider').slider({
-        tooltip: 'show',
-        min: -90,
-        max: 90,
-        step: 1,
-        value: 0
-    });
-    $('#s3-slider').on("slide", function(slideEvt) {
-        servo3Val = slideEvt.value;
-    });
 }
 
 function createJoystick() {
@@ -194,6 +182,10 @@ function batteryCallback(message) {
     document.getElementById('batteryID').innerHTML = 'Voltage: ' + message.data.toPrecision(4) + 'V';
 }
 
+function gpsCallback(message) {
+    document.getElementById('gpsID').innerHTML = '&nbsp;&nbsp;' + message.latitude.toFixed(6) + '&nbsp;N</br>' + message.longitude.toFixed(6) + "&nbsp;E";
+}
+
 function publishTwist() {
     cmdVelPub.publish(twist);
 }
@@ -217,29 +209,13 @@ function publishServos() {
         servo2Pub.publish(servoMsg);
     }
 
-    if (servo3Val != servo3Last) {
-        servo3Last = servo3Val;
-        servoMsg = new ROSLIB.Message({
-            data: servo3Val
-        });
-        servo3Pub.publish(servoMsg);
-    }
-
-}
-
-function systemReboot(){
-    systemRebootPub.publish()
-}
-
-function turnOff(){
-    systemShutdownPub.publish()
 }
 
 window.onblur = function(){
     twist.linear.x = 0;
     twist.angular.z = 0;
     publishTwist();
-  }
+}
 
 function shutdown() {
     clearInterval(twistIntervalID);
@@ -247,16 +223,12 @@ function shutdown() {
     cmdVelPub.unadvertise();
     servo1Pub.unadvertise();
     servo2Pub.unadvertise();
-    servo3Pub.unadvertise();
-    systemRebootPub.unadvertise();
-    systemShutdownPub.unadvertise();
     batterySub.unsubscribe();
     ros.close();
 }
 
 window.onload = function () {
 
-    // robot_hostname = location.hostname;
     robot_hostname = "localhost";
 
     initROS();
@@ -264,8 +236,8 @@ window.onload = function () {
     initTeleopKeyboard();
     createJoystick();
 
-    // video = document.getElementById('video');
-    // video.src = "http://" + robot_hostname + ":8080/stream?topic=/camera/image_raw&type=ros_compressed";
+    video = document.getElementById('video');
+    video.src = "http://" + robot_hostname + ":8080/stream?topic=/image_raw&type=ros_compressed";
 
     twistIntervalID = setInterval(() => publishTwist(), 100); // 10 hz
 
@@ -273,5 +245,3 @@ window.onload = function () {
 
     window.addEventListener("beforeunload", () => shutdown());
 }
-
-

@@ -11,6 +11,10 @@ var twistIntervalID;
 var servoIntervalID;
 var robot_hostname;
 
+var service_record_client;
+var vx_last = 0.0;
+var wz_last = 0.0;
+
 var max_linear_speed = 0.5;
 var max_angular_speed = 1.2;
 
@@ -20,7 +24,6 @@ function initROS() {
         url: "ws://" + robot_hostname + ":9090"
     });
 
-    // Init message with zero values.
     twist = new ROSLIB.Message({
         linear: {
             x: 0,
@@ -67,6 +70,7 @@ function initROS() {
         name: 'system/reboot',
         messageType: 'std_msgs/Empty'
     });
+
     systemRebootPub.advertise();
 
     systemShutdownPub = new ROSLIB.Topic({
@@ -74,6 +78,7 @@ function initROS() {
         name: 'system/shutdown',
         messageType: 'std_msgs/Empty'
     });
+
     systemShutdownPub.advertise();
 
     batterySub = new ROSLIB.Topic({
@@ -82,6 +87,7 @@ function initROS() {
         messageType : 'std_msgs/Float32',
         queue_length: 1
     });
+
     batterySub.subscribe(batteryCallback);
 
     gpsSub = new ROSLIB.Topic({
@@ -90,9 +96,15 @@ function initROS() {
         messageType : 'sensor_msgs/NavSatFix',
         queue_length: 1
     });
-    gpsSub.subscribe(gpsCallback);
-}
 
+    gpsSub.subscribe(gpsCallback);
+
+    service_record_client = new ROSLIB.Service({
+        ros : ros,
+        name : '/gps_rec/record',
+        serviceType : 'std_srvs/Empty'
+    })
+}
 
 function initSliders() {
 
@@ -187,7 +199,13 @@ function gpsCallback(message) {
 }
 
 function publishTwist() {
-    cmdVelPub.publish(twist);
+    if (twist.linear.x == 0.0 && twist.angular.z == 0.0 && vx_last == 0.0 && wz_last == 0.0) {
+        // pass
+    } else {
+        cmdVelPub.publish(twist);
+        vx_last = twist.linear.x;
+        wz_last = twist.angular.z;
+    }
 }
 
 function publishServos() {
@@ -211,12 +229,6 @@ function publishServos() {
 
 }
 
-window.onblur = function(){
-    twist.linear.x = 0;
-    twist.angular.z = 0;
-    publishTwist();
-}
-
 function shutdown() {
     clearInterval(twistIntervalID);
     clearInterval(servoIntervalID);
@@ -225,6 +237,11 @@ function shutdown() {
     servo2Pub.unadvertise();
     batterySub.unsubscribe();
     ros.close();
+}
+
+function record() {
+    var request = new ROSLIB.ServiceRequest({});
+    service_record_client.callService(request, function(response){});
 }
 
 window.onload = function () {
@@ -244,4 +261,10 @@ window.onload = function () {
     servoIntervalID = setInterval(() => publishServos(), 100); // 10 hz
 
     window.addEventListener("beforeunload", () => shutdown());
+}
+
+window.onblur = function(){
+    twist.linear.x = 0;
+    twist.angular.z = 0;
+    publishTwist();
 }

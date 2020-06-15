@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="./css/font.css" />
 
         <script src="./js/jquery.min.js"></script>
+        <script src="./js/jquery.csv.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
         <script src="./js/bootstrap-slider.min.js"></script>
         <script src="./js/roslib.min.js"></script>
@@ -38,9 +39,17 @@
         <div class="container-fluid">
             <ul class="navbar-nav">
                 <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="window.location.reload();">Reload</button>
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="save_nav();">Save</button>
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="start_nav()">Start</button>
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="stop_nav()">Stop</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="save();">Save</button>
+            </ul>
+        </div>
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="start()">Start</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="stop()">Stop</button>
+            </ul>
+        </div>
+        <div class="container-fluid">
+            <ul class="navbar-nav">
                 <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="shutdown(); self.close();">Close</button>
             </ul>
         </div>
@@ -55,43 +64,7 @@
                 <th scope="col">Num</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <input type="button" value="Delete" onclick="delete_row(this);">
-                </td>
-                <td>24.123456</td>
-                <td>125.123456</td>
-                <td>
-                    <form>
-                        <input type="number" min="0" max="10" step="1" value="0" required>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="button" value="Delete" onclick="delete_row(this);">
-                </td>
-                <td>24.123456</td>
-                <td>125.123456</td>
-                <td>
-                    <form>
-                        <input type="number" min="0" max="10" step="1" value="0" required>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="button" value="Delete" onclick="delete_row(this);">
-                </td>
-                <td>24.123456</td>
-                <td>125.123456</td>
-                <td>
-                    <form>
-                        <input type="number" min="0" max="10" step="1" value="0" required>
-                    </form>
-                </td>
-            </tr>
+        <tbody id="tbodyID">
         </tbody>
     </table>
 

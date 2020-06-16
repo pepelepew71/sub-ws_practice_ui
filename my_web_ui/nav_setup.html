@@ -38,19 +38,13 @@
     <nav class="navbar navbar-expand-md bg-bar">
         <div class="container-fluid">
             <ul class="navbar-nav">
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="load();">Load</button>
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="save();">Save</button>
-            </ul>
-        </div>
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="start()">Start</button>
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="stop()">Stop</button>
-            </ul>
-        </div>
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="shutdown(); self.close();">Close</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="load_tbody();">Load</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="clear_tbody();">Clear</button>
+                <button type="button" class="btn btn-warning btn-sm custom-btn mt-2 ml-3" onclick="get_csvtxt();">Get</button>
+                <button type="button" class="btn btn-warning btn-sm custom-btn mt-2 ml-3" onclick="set_csvtxt();">Set</button>
+                <button type="button" class="btn btn-danger btn-sm custom-btn mt-2 ml-3" onclick="read_csvtxt();">Read</button>
+                <button type="button" class="btn btn-danger btn-sm custom-btn mt-2 ml-3" onclick="save_csvtxt();">Save</button>
+                <button type="button" class="btn btn-info btn-sm custom-btn mt-2 ml-3" onclick="shutdown(); self.close();">Close</button>
             </ul>
         </div>
     </nav>

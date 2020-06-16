@@ -45,7 +45,7 @@
             </div>
 
             <div class="col-3" >
-                <div id="batteryID" class="center-fit" style="width: 70px; height: 40px; color: aliceblue; text-align: center;">Voltage: 0V</div>
+                <div id="batteryID" class="center-fit" style="width: 70px; height: 20px; color: aliceblue; text-align: center;">Voltage: 0V</div>
             </div>
 
             <div class="col-2 text-center">
@@ -59,13 +59,12 @@
             </button>
 
             <div class="col-5 collapse navbar-collapse ml-auto" id="collapsibleNavbar">
+                <div id="statusID" style="width: 70px; color: aliceblue; text-align: center;"></div>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item ml-auto">
-                        <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="record()">GPS</br>Record</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-success btn-sm custom-btn mt-2 ml-3" onclick="window.open('./nav_setup.html', '_blank')">Nav</br>Setup</button>
-                    </li>
+                    <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="record()">GPS</br>Record</button>
+                    <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="start()">Start</button>
+                    <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" onclick="stop()">Stop</button>
+                    <button type="button" class="btn btn-success btn-sm custom-btn mt-2 ml-3" onclick="window.open('./nav_setup.html', '_blank')">Nav</br>Setup</button>
                 </ul>
             </div>
 
@@ -75,7 +74,7 @@
 
     <div class="d-flex justify-content-start">
         <div class="row">
-            <div class="col-5" id="gpsID" style="color: rgb(255, 0, 0); font-size: large; font-family: Arial;">
+            <div class="col-5" id="gpsID" style="color: rgb(255, 255, 255); font-size: large; font-family: Arial;">
                 ?&nbsp;N</br>?&nbsp;E
             </div>
         </div>

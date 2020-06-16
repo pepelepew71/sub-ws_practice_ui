@@ -2,6 +2,7 @@ var twist;
 var manager;
 var ros;
 var batterySub;
+var statusSub;
 var gpsSub;
 var cmdVelPub;
 var servo1Pub, servo2Pub;
@@ -12,6 +13,8 @@ var servoIntervalID;
 var robot_hostname;
 
 var service_record_client;
+var service_turn_on_client;
+
 var vx_last = 0.0;
 var wz_last = 0.0;
 
@@ -43,7 +46,6 @@ function initROS() {
         messageType: 'geometry_msgs/Twist',
         queue_size: 10
     });
-
     cmdVelPub.advertise();
 
     servo1Pub = new ROSLIB.Topic({
@@ -53,6 +55,7 @@ function initROS() {
         latch: true,
         queue_size: 5
     });
+    servo1Pub.advertise();
 
     servo2Pub = new ROSLIB.Topic({
         ros: ros,
@@ -61,8 +64,6 @@ function initROS() {
         latch: true,
         queue_size: 5
     });
-
-    servo1Pub.advertise();
     servo2Pub.advertise();
 
     systemRebootPub = new ROSLIB.Topic({
@@ -70,7 +71,6 @@ function initROS() {
         name: 'system/reboot',
         messageType: 'std_msgs/Empty'
     });
-
     systemRebootPub.advertise();
 
     systemShutdownPub = new ROSLIB.Topic({
@@ -78,7 +78,6 @@ function initROS() {
         name: 'system/shutdown',
         messageType: 'std_msgs/Empty'
     });
-
     systemShutdownPub.advertise();
 
     batterySub = new ROSLIB.Topic({
@@ -87,8 +86,15 @@ function initROS() {
         messageType : 'std_msgs/Float32',
         queue_length: 1
     });
-
     batterySub.subscribe(batteryCallback);
+
+    statusSub = new ROSLIB.Topic({
+        ros : ros,
+        name : 'status_for_web',
+        messageType : 'std_msgs/String',
+        queue_length: 1
+    });
+    statusSub.subscribe(statusCallback);
 
     gpsSub = new ROSLIB.Topic({
         ros : ros,
@@ -96,7 +102,6 @@ function initROS() {
         messageType : 'sensor_msgs/NavSatFix',
         queue_length: 1
     });
-
     gpsSub.subscribe(gpsCallback);
 
     service_record_client = new ROSLIB.Service({
@@ -104,6 +109,12 @@ function initROS() {
         name : '/gps_rec/record',
         serviceType : 'std_srvs/Empty'
     })
+
+    service_turn_on_client = new ROSLIB.Service({
+        ros : ros,
+        name : '/switch/turn_on',
+        serviceType : 'std_srvs/SetBool'
+    });
 }
 
 function initSliders() {
@@ -194,6 +205,10 @@ function batteryCallback(message) {
     document.getElementById('batteryID').innerHTML = 'Voltage: ' + message.data.toPrecision(4) + 'V';
 }
 
+function statusCallback(message) {
+    document.getElementById('statusID').innerHTML = message.data;
+}
+
 function gpsCallback(message) {
     document.getElementById('gpsID').innerHTML = '&nbsp;&nbsp;' + message.latitude.toFixed(6) + '&nbsp;N</br>' + message.longitude.toFixed(6) + "&nbsp;E";
 }
@@ -242,6 +257,16 @@ function shutdown() {
 function record() {
     var request = new ROSLIB.ServiceRequest({});
     service_record_client.callService(request, function(response){});
+}
+
+function start() {
+    var request = new ROSLIB.ServiceRequest({data: true});
+    service_turn_on_client.callService(request, function(response){});
+}
+
+function stop() {
+    var request = new ROSLIB.ServiceRequest({data: false});
+    service_turn_on_client.callService(request, function(response){});
 }
 
 window.onload = function () {

@@ -3,10 +3,8 @@ var robot_hostname;
 
 var service_get_client;
 var service_set_client;
-var service_load_client;
+var service_read_client;
 var service_save_client;
-var service_clear_client;
-var service_turn_on_client;
 
 var csvtxt;
 var csvArray;
@@ -45,9 +43,9 @@ function initROS() {
         serviceType : 'ros_gps_nav/SetNav'
     });
 
-    service_load_client = new ROSLIB.Service({
+    service_read_client = new ROSLIB.Service({
         ros : ros,
-        name : '/gps_rec/load',
+        name : '/gps_rec/read',
         serviceType : 'std_srvs/Empty'
     });
 
@@ -55,18 +53,6 @@ function initROS() {
         ros : ros,
         name : '/gps_rec/save',
         serviceType : 'std_srvs/Empty'
-    });
-
-    service_clear_client = new ROSLIB.Service({
-        ros : ros,
-        name : '/gps_rec/clear',
-        serviceType : 'std_srvs/Empty'
-    });
-
-    service_turn_on_client = new ROSLIB.Service({
-        ros : ros,
-        name : '/switch/turn_on',
-        serviceType : 'std_srvs/SetBool'
     });
 }
 
@@ -82,30 +68,12 @@ function delete_row(btndel) {
     }
 }
 
-function save() {
-    var lats = document.getElementsByName('latName');
-    var lons = document.getElementsByName('lonName');
-    var nums = document.getElementsByName('numName');
-
-    var result = ""
-    for (i = 0; i < lats.length; i++) {
-        result = result.concat(String.format("{0},{1},{2}\n", lats[i].innerHTML, lons[i].innerHTML, nums[i].value));
-    }
-
-    var request = new ROSLIB.ServiceRequest({csvtxt: result});
-    service_set_client.callService(request, function(response) {});
-
-    get_csvtxt_from_client();
+function clear_tbody() {
+    csvArray = "";
+    document.getElementById('tbodyID').innerHTML = ""
 }
 
-function get_csvtxt_from_client() {
-    var request = new ROSLIB.ServiceRequest({});
-    service_get_client.callService(request, function(response) {
-        csvtxt = response.csvtxt;
-    });
-}
-
-function load() {
+function load_tbody() {
     csvArray = $.csv.toArrays(csvtxt);
     var result = "";
     for (i = 0; i < csvArray.length; i++) {
@@ -114,14 +82,35 @@ function load() {
     document.getElementById('tbodyID').innerHTML = result
 }
 
-function start() {
-    var request = new ROSLIB.ServiceRequest({data: true});
-    service_turn_on_client.callService(request, function(response) {});
+function get_csvtxt() {
+    var request = new ROSLIB.ServiceRequest({});
+    service_get_client.callService(request, function(response) {
+        csvtxt = response.csvtxt;
+    });
 }
 
-function stop() {
-    var request = new ROSLIB.ServiceRequest({data: false});
-    service_turn_on_client.callService(request, function(response) {});
+function set_csvtxt() {
+    var lats = document.getElementsByName('latName');
+    var lons = document.getElementsByName('lonName');
+    var nums = document.getElementsByName('numName');
+
+    var result = "";
+    for (i = 0; i < lats.length; i++) {
+        result = result.concat(String.format("{0},{1},{2}\n", lats[i].innerHTML, lons[i].innerHTML, nums[i].value));
+    }
+
+    var request = new ROSLIB.ServiceRequest({csvtxt: result});
+    service_set_client.callService(request, function(response) {});
+}
+
+function read_csvtxt() {
+    var request = new ROSLIB.ServiceRequest({});
+    service_read_client.callService(request, function(response){});
+}
+
+function save_csvtxt() {
+    var request = new ROSLIB.ServiceRequest({});
+    service_save_client.callService(request, function(response) {});
 }
 
 window.onload = function () {
@@ -129,7 +118,7 @@ window.onload = function () {
     robot_hostname = "localhost";
 
     initROS();
-    get_csvtxt_from_client();
+    get_csvtxt();
 
     window.addEventListener("beforeunload", () => shutdown());
 }

@@ -8,8 +8,8 @@
 
         <title>Robot Control</title>
 
-        <meta name="application-name" content="my_robot UI">
-        <meta name="apple-mobile-web-app-title" content="my_robot UI">
+        <meta name="application-name" content="Rover UI">
+        <meta name="apple-mobile-web-app-title" content="Rover UI">
 
         <meta name="theme-color" content="#000000">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -41,11 +41,11 @@
         <div class="container-fluid">
 
             <div class="col-2 navbar-brand" href="#">
-                <p>Logo</p>
+                <p>Robot</p>
             </div>
 
             <div class="col-3" >
-                <div id="batteryID" class="center-fit" style="width: 70px; height: 20px; color: aliceblue; text-align: center;">Voltage: 0V</div>
+                <div id="batteryID" class="center-fit" style="width: 70px; height: 40px; color: aliceblue; text-align: center;">Voltage: 0V</div>
             </div>
 
 
@@ -59,14 +59,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="col-2 text-center" id="statusID" style="width: 70px; color: aliceblue; text-align: center;">
+            <div class="col-2 text-center" id="statusID" style="width: 30px; color: aliceblue; text-align: center;">
             </div>
 
             <div class="col-3 collapse navbar-collapse ml-auto" id="collapsibleNavbar">
-                <ul class="navbar-nav ml-auto">
-                    <button type="button" class="btn btn-warning btn-sm custom-btn mt-2 ml-3" onclick="systemReboot()">Reboot</button>
-                    <button type="button" class="btn btn-danger btn-sm custom-btn mt-2 ml-3" onclick="turnOff()">Turn off</button>
-                </ul>
+                <button type="button" class="btn btn-warning btn-sm custom-btn mt-2 ml-3" style="height:50px; width:60px;" onclick="systemReboot()">Reboot</button>
+                <button type="button" class="btn btn-danger btn-sm custom-btn mt-2 ml-3" style="height:50px; width:70px;" onclick="turnOff()">Turn off</button>
             </div>
 
         </div>
@@ -74,26 +72,26 @@
 
 
     <div class="d-flex justify-content-start">
-		<div class="col my-2">
+        <div class="col my-1">
             <div class="col" id="gpsID" style="color: rgb(255, 255, 255); font-size: large; font-family: Arial;">
                 ?&nbsp;N</br>?&nbsp;E
-			</div>
-		</div>
-        <div class="navbar-nav ml-auto my-1">
+            </div>
+        </div>
+        <div class="navbar-nav ml-auto">
             <div class="col">
-				<button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="width:60px;" onclick="record()">GPS</br>Record</button>
-				<button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="width:60px;" onclick="start()">Start</button>
-				<button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="width:60px;" onclick="stop()">Stop</button>
-				<button type="button" class="btn btn-success btn-sm custom-btn mt-2 ml-3" style="width:60px;" onclick="window.open('./nav_setup.html', '_blank')">Nav</br>Setup</button>
-			</div>
-		</div>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="height:30px; width:60px;" onclick="record()">Record</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="height:30px; width:60px;" onclick="start()">Start</button>
+                <button type="button" class="btn btn-primary btn-sm custom-btn mt-2 ml-3" style="height:30px; width:60px;" onclick="stop()">Stop</button>
+                <button type="button" class="btn btn-success btn-sm custom-btn mt-2 ml-3" style="height:30px; width:60px;" onclick="window.open('./nav_setup.html', '_blank')">Setup</button>
+            </div>
+        </div>
     </div>
 
 
     <div class="row md-6 fixed-bottom">
 
         <div class="col my-2 d-none d-md-block">
-            <div id="servoB" class=" rounded bg-servo" style=" width: 250px; height: 130px;">
+            <div id="servoB" class="rounded bg-servo" style=" width: 250px; height: 190px;" >
 
                 <div class="row">
                     <div class="col-md-2 ml-1 mt-2">
@@ -113,11 +111,15 @@
                     </div>
                 </div>
 
+                <div class="col-6 mx-auto">
+                    <button type="button" class="btn btn-light btn-sm custom-btn mt-2 ml-3" style="width:60px;" onclick="relay()">Relay</button>
+                </div>
+
             </div>
         </div>
 
         <div class="row my-2 align-self-end mr-auto d-none d-md-block">
-            <button id="servoBtn" class=" btn-dark custom-btn btn-sm mx-auto rounded" type="button" onclick="servoHide()">Hide servos</button>
+            <button id="servoBtn" class="btn-dark custom-btn btn-sm mx-auto rounded" type="button" onclick="servoHide()">Hide servos</button>
         </div>
 
         <div class="col my-2 d-flex" style="height: 210px;">
@@ -126,7 +128,7 @@
 
     </div>
 
-    <div class="justify-content-center" style="margin-top: -70px; min-width: 100%; min-height: 100%;">
+    <div class="justify-content-center" style="margin-top: -70px; min-width: 100%; min-height: 100%; ">
         <img src="" class="p-1 center-fit" alt="" id="video" style="background-size: cover"></img>
     <div>
 
